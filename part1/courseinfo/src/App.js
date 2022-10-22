@@ -1,22 +1,33 @@
 const App = () => {
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
-  const total = exercises1 + exercises2 + exercises3
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
+  console.log(course);
 
   return (
     <div>
-      <Header course={course} />
-      <Content name1={part1} ex1={exercises1} name2={part2} ex2={exercises2} name3={part3} ex3={exercises3}/>
-      <Total total={total} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
 
+// Components start here
 const Header = (props) => {
   return (
     <>
@@ -26,6 +37,7 @@ const Header = (props) => {
 }
 
 const Part = (props) => {
+  console.log(props);
   return (
     <>
       <p>{props.name} {props.count}</p>
@@ -34,12 +46,13 @@ const Part = (props) => {
 }
 
 const Content = (props) => {
+  console.log(props);
   return(
-    <div>
-      <Part name={props.name1} count={props.ex1} />
-      <Part name={props.name2} count={props.ex2} />
-      <Part name={props.name3} count={props.ex3} />
-    </div>
+    <>
+      <Part name={props.parts[0].name} count={props.parts[0].exercises} />
+      <Part name={props.parts[1].name} count={props.parts[1].exercises} />
+      <Part name={props.parts[2].name} count={props.parts[2].exercises} />
+    </>
   )
 }
 
@@ -47,7 +60,7 @@ const Total = (props) => {
 
   return (
     <>
-      <p>Number of exercises {props.total}</p>
+      <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
     </>
   )
 }
