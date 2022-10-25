@@ -46,6 +46,7 @@ const App = () => {
   let total = good + bad + neutral
   let average = ((good * 1) + (bad*-1)) / total
   let positive = good / total * 100
+  
   return (
     <div>
       <h1>give feedback</h1>
