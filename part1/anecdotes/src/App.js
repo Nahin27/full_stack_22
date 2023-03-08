@@ -1,23 +1,21 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-const DisplayAnecdote = (props) => {
+const Heading = ( {text} ) => <><h1>{text}</h1></>
+
+const DisplayAnecdote = ( {anecdote, point} ) => {
   return (
     <>
-      <p>{props.anecdote}</p>
-      <p>has {props.points} votes</p>
+      <p>{anecdote}</p>
+      <p>has {point} votes</p>  
     </>
   )
 }
 
-const Title = (props) => {
-  return(
-    <h1>{props.text}</h1>
-  )
-}
-
-const Button = (props) => {
-  return(
-    <button onClick={props.onClick}>{props.text}</button>
+const Button = ({ click, text }) => {
+  return (
+    <>
+      <button onClick={click}>{text}</button>  
+    </>
   )
 }
 
@@ -29,34 +27,42 @@ const App = () => {
     'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
   ]
 
-  const [selected, setSelected] = useState(0)
-  const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+  const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0));
   console.log(points);
+  console.log(anecdotes.length)
 
+  const randomAnecdoteIndex = (anecdoteList) => {
+    const helper = () => {
+      const ind = Math.floor(Math.random() * anecdoteList.length);
+      setSelected(ind);
+    }
+    return helper
+  } 
+  
   const vote = () => {
-    const points_copy = [...points]
-    points_copy[selected] += 1
-    setPoints(points_copy)
+    const copy = [...points]
+    copy[selected] += 1;
+    setPoints(copy);
   }
 
-  const randomAnecdote = () => setSelected(Math.floor(Math.random() * anecdotes.length))
-
-
+  const maxVote = () => {
+    return points.indexOf(Math.max(...points));
+  }
 
   return (
-    <div>
-      <Title text="Anecdote of the week" />
-      <DisplayAnecdote anecdote={anecdotes[selected]} points={points[selected]} />
-      <div>
-        <Button onClick={vote} text="vote" />
-        <Button onClick={randomAnecdote} text="next anecdote" />
-      </div>
-      <Title text="Anecdote with most votes" />
-      <DisplayAnecdote anecdote={anecdotes[points.indexOf(Math.max(...points))]} points={Math.max(...points)} />
-    </div>
+    <>
+      <Heading text="Anecdote of the day" />
+      <DisplayAnecdote anecdote={anecdotes[selected]} point={points[selected]} />
+      <Button click={vote} text="Vote" />
+      <Button click={randomAnecdoteIndex(anecdotes)} text="Next anecdote"/>
+      <Heading text="Anecdote with most votes" />
+      <DisplayAnecdote anecdote={anecdotes[maxVote()]} point={points[maxVote()]} />
+    </>
   )
 }
 
