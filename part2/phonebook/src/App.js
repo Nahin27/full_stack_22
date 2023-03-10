@@ -1,13 +1,16 @@
 import { useState } from "react";
 
 const App = () => {
-  const [persons, setPersons] = useState([{
-      name: "Arto Hellas",
-      number: "0176271234",
-    },
-  ]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
+
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState("")
+  const [filterText, setFilterText] = useState("")
 
   // Handles a button click to add a new number
   const addNumber = (event) => {
@@ -39,12 +42,21 @@ const App = () => {
   const numberInput = (event) => {
     setNewNum(event.target.value)
   }
+
+  const searchInput = (event) => {
+    setFilterText(event.target.value) 
+  }
   // input handlers end
+
+  const filteredPersons = persons.filter(
+    (person) => person.name.toLowerCase().includes(filterText.toLowerCase())
+  )
 
   return (
     <div>
       <h2>Phonebook</h2>
-
+      Search: <input onChange={searchInput} value={filterText}/>
+      <h1>Add new</h1>
       <form onSubmit={addNumber}> 
         <div>
           name: <input onChange={nameInput} value={newName}/>
@@ -57,7 +69,7 @@ const App = () => {
 
       <h2>Numbers</h2>
       
-      <Numbers persons={persons} />
+      <Numbers persons={filteredPersons} />
 
     </div>
   )
