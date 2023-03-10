@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Input from "./components/Input.js";
+import FormToAdd from "./components/FormToAdd.js";
+import Numbers from "./components/Numbers.js";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -22,7 +25,7 @@ const App = () => {
       number: newNum
     }
 
-    const check = persons.find(person => person.name === newName);
+    const check = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
 
     if (check) {
       alert(`${numberObj.name} is already added to the phonebook`)
@@ -55,17 +58,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      Search: <input onChange={searchInput} value={filterText}/>
+      <Input text="Search" onChange={searchInput} value={filterText}/>
       <h1>Add new</h1>
-      <form onSubmit={addNumber}> 
-        <div>
-          name: <input onChange={nameInput} value={newName}/>
-          Number: <input onChange={numberInput} value={newNum}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <FormToAdd onSubmit={addNumber} nameChange={nameInput} numberChange={numberInput} newName={newName} newNum={newNum}/>
 
       <h2>Numbers</h2>
       
@@ -74,19 +69,5 @@ const App = () => {
     </div>
   )
 }
-
-const Number = ({ name, number }) => {
-  return <li>{name} {number}</li>
-}
-
-const Numbers = ({ persons }) => (
-  <ul>
-    {persons.map(
-      (person) => (
-        <Number name={person.name} key={person.name} number={person.number}/>
-      )
-    )}
-  </ul>
-)
 
 export default App;
