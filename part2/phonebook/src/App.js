@@ -29,8 +29,17 @@ const App = () => {
 
     const check = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
 
+
     if (check) {
-      alert(`${numberObj.name} is already added to the phonebook`)
+      console.log(check.id)
+      if(window.confirm(`${numberObj.name} is already added to the phonebook, replace it?`)) {
+        const changedPerson = {...check, number: newNum}
+
+        numService.update(changedPerson, check.id)
+          .then(() => {
+            setPersons(persons.map(p => p.id === changedPerson.id ? changedPerson : p ))
+          })
+      }
     } else { // posts the new number to db.json
       numService.postNum(numberObj)
         .then(number => {

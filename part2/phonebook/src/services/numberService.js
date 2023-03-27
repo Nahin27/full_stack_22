@@ -15,5 +15,10 @@ const deleteNum = id => {
     return axios.delete(`${baseUrl}/${id}`)
 }
 
-const numService = { renderList, postNum, deleteNum }
+const update = (numObj, id) => {
+    const request = axios.put(`${baseUrl}/${id}`, numObj)
+    return request.then(response => response.data)
+}
+
+const numService = { renderList, postNum, deleteNum, update }
 export default numService
