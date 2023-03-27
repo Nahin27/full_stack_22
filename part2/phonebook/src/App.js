@@ -3,12 +3,14 @@ import Input from "./components/Input.js";
 import FormToAdd from "./components/FormToAdd.js";
 import Number from "./components/Number.js";
 import numService from "./services/numberService"
+import Notification from "./components/Notification.js";
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState("")
   const [filterText, setFilterText] = useState("")
+  const [msg, setMsg] = useState(null)
 
   useEffect(() => { //renders the content of the url
     numService.renderList()
@@ -37,12 +39,22 @@ const App = () => {
 
         numService.update(changedPerson, check.id)
           .then(() => {
+            setMsg(`${changedPerson.name} has been updated successfully!`)
+            setTimeout(() => {
+              setMsg(null)
+            }, 5000)
             setPersons(persons.map(p => p.id === changedPerson.id ? changedPerson : p ))
+            setNewName("")
+            setNewNum("")
           })
       }
     } else { // posts the new number to db.json
       numService.postNum(numberObj)
         .then(number => {
+          setMsg(`${number.name} has been added successfully!`)
+          setTimeout(() => {
+            setMsg(null)
+          }, 5000)
           setPersons(persons.concat(number))
           setNewName("")
           setNewNum("")
@@ -74,6 +86,10 @@ const App = () => {
     if(window.confirm(`Do you really want to delete ${deletedPerson.name}`)){
       numService.deleteNum(id)
       .then(() => {
+        setMsg(`${deletedPerson.name} has been deleted successfully!`)
+        setTimeout(() => {
+          setMsg(null)
+        }, 5000)
         setPersons(persons.filter(
           (person) => (
             person.id !== id
@@ -90,6 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={msg}/>
       <Input text="Search" onChange={searchInput} value={filterText}/>
       <h1>Add new</h1>
       <FormToAdd onSubmit={addNumber} nameChange={nameInput} numberChange={numberInput} newName={newName} newNum={newNum}/>

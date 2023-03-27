@@ -1,24 +1,14 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "12345",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "1234",
+      "name": "nahin raihan",
+      "number": "123456",
       "id": 2
     },
     {
-      "name": "arto hel",
-      "number": "018972",
+      "name": "mumtahena",
+      "number": "12311231",
       "id": 3
-    },
-    {
-      "name": "arto hel123123",
-      "number": "018972",
-      "id": 4
     }
   ]
 }
