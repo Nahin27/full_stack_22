@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Input from "./components/Input.js";
 import FormToAdd from "./components/FormToAdd.js";
-import Numbers from "./components/Numbers.js";
+import Number from "./components/Number.js";
 import numService from "./services/numberService"
 
 const App = () => {
@@ -57,6 +56,24 @@ const App = () => {
   }
   // input handlers end
 
+  // delete a number 
+  const deleteNum = (id) => {
+    console.log(`test ${id}`)
+    const deletedPerson = persons.find((person) => person.id === id)
+    console.log(deletedPerson.name)
+
+    if(window.confirm(`Do you really want to delete ${deletedPerson.name}`)){
+      numService.deleteNum(id)
+      .then(() => {
+        setPersons(persons.filter(
+          (person) => (
+            person.id !== id
+          )
+        ))
+      })
+    }
+  }
+
   const filteredPersons = persons.filter(
     (person) => person.name.toLowerCase().includes(filterText.toLowerCase())
   )
@@ -69,8 +86,14 @@ const App = () => {
       <FormToAdd onSubmit={addNumber} nameChange={nameInput} numberChange={numberInput} newName={newName} newNum={newNum}/>
 
       <h2>Numbers</h2>
-      
-      <Numbers persons={filteredPersons} />
+
+      {filteredPersons.map(
+        (person) => {
+          return (
+            <Number name={person.name} key={person.id} number={person.number} deleteNum={() => deleteNum(person.id)}/>
+          )
+        }
+      )}
 
     </div>
   )
