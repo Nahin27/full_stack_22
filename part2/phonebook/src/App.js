@@ -10,7 +10,7 @@ const App = () => {
   const [newNum, setNewNum] = useState("")
   const [filterText, setFilterText] = useState("")
 
-  useEffect(() => {
+  useEffect(() => { //renders the content of the url
     axios
       .get("http://localhost:3001/persons")
       .then(response => {
@@ -32,10 +32,14 @@ const App = () => {
 
     if (check) {
       alert(`${numberObj.name} is already added to the phonebook`)
-    } else {      
-      setPersons(persons.concat(numberObj))
-      setNewName("");
-      setNewNum("");
+    } else { // posts the new number to db.json
+      axios
+        .post("http://localhost:3001/persons", numberObj)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName("")
+          setNewNum("")
+        })
     }
 
   }
