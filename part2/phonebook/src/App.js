@@ -3,6 +3,7 @@ import axios from "axios";
 import Input from "./components/Input.js";
 import FormToAdd from "./components/FormToAdd.js";
 import Numbers from "./components/Numbers.js";
+import numService from "./services/numberService"
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,17 +12,16 @@ const App = () => {
   const [filterText, setFilterText] = useState("")
 
   useEffect(() => { //renders the content of the url
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
+    numService.renderList()
+      .then(persons => {
+        setPersons(persons)
       })
   }, [])
 
   // Handles a button click to add a new number
   const addNumber = (event) => {
-    event.preventDefault();
-    console.log('clicked');
+    event.preventDefault(); // <----- added a semi colon for ur safety
+    console.log('clicked')
 
     const numberObj = {
       name: newName,
@@ -33,10 +33,9 @@ const App = () => {
     if (check) {
       alert(`${numberObj.name} is already added to the phonebook`)
     } else { // posts the new number to db.json
-      axios
-        .post("http://localhost:3001/persons", numberObj)
-        .then(response => {
-          setPersons(persons.concat(response.data))
+      numService.postNum(numberObj)
+        .then(number => {
+          setPersons(persons.concat(number))
           setNewName("")
           setNewNum("")
         })
