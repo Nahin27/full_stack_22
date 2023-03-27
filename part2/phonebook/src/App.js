@@ -4,6 +4,7 @@ import FormToAdd from "./components/FormToAdd.js";
 import Number from "./components/Number.js";
 import numService from "./services/numberService"
 import Notification from "./components/Notification.js";
+import ErrorMessage from "./components/ErrorMessage.js"
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [newNum, setNewNum] = useState("")
   const [filterText, setFilterText] = useState("")
   const [msg, setMsg] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(() => { //renders the content of the url
     numService.renderList()
@@ -46,6 +48,12 @@ const App = () => {
             setPersons(persons.map(p => p.id === changedPerson.id ? changedPerson : p ))
             setNewName("")
             setNewNum("")
+          })
+          .catch(error => {
+            setErrorMsg(`${changedPerson.name} doesn't exist anymore`)
+            setTimeout(() => {
+              setErrorMsg(null)
+            }, 5000)
           })
       }
     } else { // posts the new number to db.json
@@ -96,6 +104,12 @@ const App = () => {
           )
         ))
       })
+      .catch(error => {
+        setErrorMsg(`${deletedPerson.name} doesn't exist anymore`)
+        setTimeout(() => {
+          setErrorMsg(null)
+        }, 5000)
+      })
     }
   }
 
@@ -107,6 +121,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={msg}/>
+      <ErrorMessage message={errorMsg} />
       <Input text="Search" onChange={searchInput} value={filterText}/>
       <h1>Add new</h1>
       <FormToAdd onSubmit={addNumber} nameChange={nameInput} numberChange={numberInput} newName={newName} newNum={newNum}/>
